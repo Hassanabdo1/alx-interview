@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+"""
+Pascal's Triangle
+"""
+
 def pascal_triangle(n):
     # Check the input and return an empty list if n <= 0
     if n <= 0:
