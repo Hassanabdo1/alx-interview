@@ -1,4 +1,6 @@
-nitialize a list opened with False values, indicating that no boxes are opened initially except the first one.
+Explanation:
+
+Initialize a list opened with False values, indicating that no boxes are opened initially except the first one.
 Start with the key to the first box (index 0).
 Use a list keys to keep track of keys that can be used to open boxes.
 While there are keys available:
