@@ -1,50 +1,55 @@
 #!/usr/bin/python3
 """
-log parsing
+Log parsing
 """
-
 import sys
-import re
 
 
-def output(log: dict) -> None:
+line_count = 0
+total_size = 0
+status_codes = {
+    '200': 0,
+    '301': 0,
+    '400': 0,
+    '401': 0,
+    '403': 0,
+    '404': 0,
+    '405': 0,
+    '500': 0
+}
+
+
+def print_status():
     """
-    helper function to display stats
+    Helper function to output status
     """
-    print("File size: {}".format(log["file_size"]))
-    for code in sorted(log["code_frequency"]):
-        if log["code_frequency"][code]:
-            print("{}: {}".format(code, log["code_frequency"][code]))
+    print(f"File size: {total_size}")
+
+    for code, count in status_codes.items():
+        if count > 0:
+            print(f"{code}: {count}")
 
 
-if __name__ == "__main__":
-    regex = re.compile(
-    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)')  # nopep8
+try:
+    for line in sys.stdin:
+        if line_count == 10:
+            print_status()
+            line_count = 0
 
-    line_count = 0
-    log = {}
-    log["file_size"] = 0
-    log["code_frequency"] = {
-        str(code): 0 for code in [
-            200, 301, 400, 401, 403, 404, 405, 500]}
+        line = line.rstrip()
+        line_parts = line.split()
 
-    try:
-        for line in sys.stdin:
-            line = line.strip()
-            match = regex.fullmatch(line)
-            if (match):
-                line_count += 1
-                code = match.group(1)
-                file_size = int(match.group(2))
+        if len(line_parts) > 4:
+            code = line_parts[-2]
+            total_size += int(line_parts[-1])
 
-                # File size
-                log["file_size"] += file_size
+            # Collate the number of lines per status code
+            if code in status_codes:
+                status_codes[code] += 1
 
-                # status code
-                if (code.isdecimal()):
-                    log["code_frequency"][code] += 1
-
-                if (line_count % 10 == 0):
-                    output(log)
-    finally:
-        output(log)
+            # Increment the log count
+            line_count += 1
+except Exception:
+    pass
+finally:
+    print_status()
