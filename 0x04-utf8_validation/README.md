@@ -5,7 +5,7 @@ Bitwise Operations in Python:
 
 Understanding how to manipulate bits in Python, including operations like AND (&), OR (|), XOR (^), NOT (~), shifts (<<, >>).
 Python Bitwise Operators
-UTF-8 Encoding Scheme:
+UTF-8 Encoding Scheme:w
 
 Familiarity with the UTF-8 encoding rules, including how characters are encoded into one or more bytes.
 Understanding the patterns that represent a valid UTF-8 encoded character.
